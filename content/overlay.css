@@ -1,0 +1,39 @@
+/* JobAssist AI - Content overlay styles */
+
+.jobassist-highlight {
+  outline: 2px solid #6c5ce7 !important;
+  outline-offset: 2px;
+  transition: outline 0.3s ease;
+}
+
+.jobassist-filled {
+  outline: 2px solid #27ae60 !important;
+  outline-offset: 2px;
+  animation: jobassist-pulse 1s ease-out;
+}
+
+@keyframes jobassist-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.4); }
+  100% { box-shadow: 0 0 0 10px rgba(108, 92, 231, 0); }
+}
+
+.jobassist-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid #6c5ce7;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 13px;
+  z-index: 999999;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  animation: jobassist-slideIn 0.3s ease;
+}
+
+@keyframes jobassist-slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

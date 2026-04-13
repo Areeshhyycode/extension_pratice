@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobAssist AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <h1>JobAssist <span class="ai-tag">AI</span></h1>
+      </div>
+      <span class="version">v1.0</span>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="extract">Extract</button>
+      <button class="tab" data-tab="autofill">Auto-Fill</button>
+      <button class="tab" data-tab="cvs">My CVs</button>
+      <button class="tab" data-tab="history">History</button>
+    </nav>
+
+    <!-- Tab: Extract Job -->
+    <section id="tab-extract" class="tab-content active">
+      <div class="action-buttons">
+        <button id="btn-extract" class="btn btn-primary">Extract Job from Page</button>
+        <button id="btn-screenshot" class="btn btn-secondary">Screenshot + AI</button>
+      </div>
+
+      <div id="extraction-loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>AI is reading the page...</p>
+      </div>
+
+      <div id="extraction-result" class="result-card hidden">
+        <h3>Extracted Job Details</h3>
+        <div class="detail-row">
+          <label>Job Title</label>
+          <p id="result-title">-</p>
+        </div>
+        <div class="detail-row">
+          <label>Company</label>
+          <p id="result-company">-</p>
+        </div>
+        <div class="detail-row">
+          <label>Location</label>
+          <p id="result-location">-</p>
+        </div>
+        <div class="detail-row">
+          <label>Requirements</label>
+          <ul id="result-requirements"></ul>
+        </div>
+        <div class="detail-row">
+          <label>Experience</label>
+          <p id="result-experience">-</p>
+        </div>
+
+        <div class="cv-match-section">
+          <h3>Best CV Match</h3>
+          <div id="cv-match" class="cv-match-card">
+            <p id="matched-cv-name">-</p>
+            <div class="match-score">
+              <div class="score-bar"><div id="score-fill" class="score-fill"></div></div>
+              <span id="score-text">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="btn-autofill" class="btn btn-primary">Auto-Fill Form</button>
+          <button id="btn-save-job" class="btn btn-secondary">Save Job</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab: Auto-Fill -->
+    <section id="tab-autofill" class="tab-content hidden">
+      <div class="hero-card">
+        <h3>Smart AI Auto-Fill</h3>
+        <p>AI tumhari CV padh ke automatically form fill karega</p>
+      </div>
+
+      <div class="action-buttons">
+        <button id="btn-do-autofill" class="btn btn-primary btn-large">Auto-Fill This Page</button>
+      </div>
+
+      <div id="autofill-loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p id="autofill-loading-msg">AI is filling the form...</p>
+      </div>
+
+      <div id="autofill-result" class="result-card hidden">
+        <p id="autofill-msg"></p>
+      </div>
+
+      <!-- Active CV Selector -->
+      <div class="form-group" style="margin-top:16px;">
+        <label>Use This CV</label>
+        <select id="active-cv-select">
+          <option value="">No CV selected</option>
+        </select>
+      </div>
+
+      <button id="btn-save-form" class="btn btn-secondary" style="width:100%;margin-top:8px;">
+        Save Current Form Answers
+      </button>
+
+      <!-- Saved Answers (auto-learned) -->
+      <h3 style="margin-top:20px;">Learned Answers</h3>
+      <p class="section-desc">AI ne yeh tumhari purani forms se seekha hai</p>
+      <div id="saved-answers-list" class="cv-list"></div>
+
+      <button id="btn-add-answer" class="btn btn-secondary" style="margin-top:8px;">
+        + Add Custom Answer
+      </button>
+
+      <div id="answer-form" class="cv-form hidden" style="margin-top:12px;">
+        <div class="form-group">
+          <label>Question / Field Name</label>
+          <input type="text" id="answer-field" placeholder="e.g. CNIC Number">
+        </div>
+        <div class="form-group">
+          <label>Your Answer</label>
+          <textarea id="answer-value" rows="2" placeholder="42101-1234567-8"></textarea>
+        </div>
+        <div class="action-buttons">
+          <button id="btn-save-answer" class="btn btn-primary">Save</button>
+          <button id="btn-cancel-answer" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab: My CVs -->
+    <section id="tab-cvs" class="tab-content hidden">
+      <h3>My CVs (Max 3)</h3>
+      <div id="cv-list" class="cv-list"></div>
+
+      <div class="upload-section">
+        <label for="cv-file-input" class="btn btn-primary upload-btn">Upload CV (PDF)</label>
+        <input type="file" id="cv-file-input" accept=".pdf" class="hidden">
+      </div>
+
+      <div id="upload-progress" class="upload-progress hidden">
+        <div class="spinner"></div>
+        <p id="upload-status">Reading PDF with AI...</p>
+      </div>
+
+      <div id="cv-preview" class="cv-form hidden">
+        <h3>AI Extracted CV Details</h3>
+        <p class="cv-preview-note">Check karo aur save karo</p>
+        <div class="form-group">
+          <label>CV Name</label>
+          <input type="text" id="cv-name" placeholder="e.g., Frontend Developer CV">
+        </div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="cv-fullname">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="cv-email">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="cv-phone">
+        </div>
+        <div class="form-group">
+          <label>Skills (comma separated)</label>
+          <input type="text" id="cv-skills">
+        </div>
+        <div class="form-group">
+          <label>Experience Summary</label>
+          <textarea id="cv-experience" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Education</label>
+          <input type="text" id="cv-education">
+        </div>
+        <div class="action-buttons">
+          <button id="btn-save-cv" class="btn btn-primary">Save CV</button>
+          <button id="btn-cancel-cv" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab: History -->
+    <section id="tab-history" class="tab-content hidden">
+      <h3>Saved Jobs</h3>
+      <div id="history-list" class="history-list">
+        <p class="empty-state">No saved jobs yet.</p>
+      </div>
+      <button id="btn-clear-history" class="btn btn-danger">Clear History</button>
+    </section>
+  </div>
+
+  <script src="../lib/pdf.min.js"></script>
+  <script src="../config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

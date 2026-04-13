@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -c popup/popup.js)",
+      "Bash(node -c content/detector.js)",
+      "Bash(node -c background/service-worker.js)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('manifest.json', 'utf8'\\)\\); console.log\\('manifest.json OK'\\)\")",
+      "Bash(ls -la icons/*.png lib/*.js)"
+    ]
+  }
+}
