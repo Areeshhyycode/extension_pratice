@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<p>Right-click each icon below and "Save image as..." to save as PNG</p>
+
+<h3>icon16.png</h3>
+<canvas id="c16" width="16" height="16"></canvas>
+
+<h3>icon48.png</h3>
+<canvas id="c48" width="48" height="48"></canvas>
+
+<h3>icon128.png</h3>
+<canvas id="c128" width="128" height="128"></canvas>
+
+<script>
+function drawIcon(canvas) {
+  const ctx = canvas.getContext('2d');
+  const s = canvas.width;
+
+  // Background
+  const grad = ctx.createLinearGradient(0, 0, s, s);
+  grad.addColorStop(0, '#6c5ce7');
+  grad.addColorStop(1, '#a29bfe');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, s, s, s * 0.2);
+  ctx.fill();
+
+  // Lightning bolt
+  ctx.fillStyle = 'white';
+  ctx.font = `bold ${s * 0.6}px Arial`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('⚡', s / 2, s / 2);
+}
+
+['c16', 'c48', 'c128'].forEach(id => {
+  const canvas = document.getElementById(id);
+  drawIcon(canvas);
+
+  // Auto-download
+  const link = document.createElement('a');
+  link.download = id.replace('c', 'icon') + '.png';
+  link.href = canvas.toDataURL();
+
+  const img = new Image();
+  img.src = canvas.toDataURL();
+  canvas.parentNode.insertBefore(img, canvas.nextSibling);
+});
+</script>
+</body>
+</html>
